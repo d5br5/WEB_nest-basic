@@ -75,4 +75,31 @@ describe('MoviesService', () => {
       expect(afterCreate).toBeGreaterThan(beforeCreate);
     });
   });
+
+  describe('update', () => {
+    it('should update a movie', () => {
+      createSampleMovie();
+      service.update(1, { title: 'Updated Test' });
+      const movie = service.getOne(1);
+      expect(movie.title).toEqual('Updated Test');
+    });
+
+    it('should throw 404 error', () => {
+      try {
+        service.update(999, { title: 'Updated Test' });
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+      }
+    });
+  });
+
+  describe('searchByYear', () => {
+    it('should return movies by year', () => {
+      createSampleMovie();
+      const searchResult = service.searchByYear('2000');
+      const afterSearch = searchResult.length;
+      expect(afterSearch).toBeGreaterThan(0);
+      expect(afterSearch).toBe(1);
+    });
+  });
 });
